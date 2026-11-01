@@ -1,762 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09090f">
+<title>The Cousins — Watch</title>
+<style>
+:root{color-scheme:dark;--bg:#09090f;--panel:#14141f;--line:#29293b;--text:#f4f3ff;--muted:#a3a2ba;--accent:#a78bfa;--danger:#ff9292;--unreleased:#c084fc}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% -15%,#7c3aed38,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input{font:inherit}button{cursor:pointer}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:18px clamp(18px,4vw,58px);border-bottom:1px solid #ffffff12;background:#09090fbd;position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.mark{width:35px;height:35px;display:grid;place-items:center;border-radius:11px;background:linear-gradient(135deg,#c4b5fd,#7c3aed);color:#10091f}.top-note{color:var(--muted);font-size:13px}
+main{max-width:1450px;margin:auto;padding:clamp(20px,4vw,54px)}.hero{margin-bottom:26px}.eyebrow{color:#c4b5fd;text-transform:uppercase;letter-spacing:.2em;font-size:11px;font-weight:800;margin:0 0 9px}h1{font-size:clamp(34px,5vw,58px);letter-spacing:-.045em;line-height:1.02;margin:0}.subtitle{color:var(--muted);margin:12px 0 0}
+.status{display:flex;gap:10px;align-items:center;padding:13px 16px;border:1px solid var(--line);border-radius:12px;background:#11111bcc;color:var(--muted);font-size:13px;margin-bottom:24px}.dot{width:8px;height:8px;border-radius:50%;background:#6ee7b7;flex-shrink:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:23px;align-items:start}.card{background:linear-gradient(145deg,#14141f,#0f0f18);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 20px 65px #0003}
+.video-wrap{position:relative;aspect-ratio:16/9;background:#030305;display:grid;place-items:center}.video-wrap #player{position:absolute;inset:0;width:100%;height:100%;z-index:2}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;z-index:2}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(ellipse at center,#21183b,#0b0a12 68%);z-index:3}.empty.hidden{display:none!important}.playicon{width:66px;height:66px;border:1px solid #c4b5fd55;background:#a78bfa18;color:#c4b5fd;border-radius:22px;display:grid;place-items:center;font-size:28px;margin-bottom:15px}.empty h2{margin:0;font-size:21px}.empty p{max-width:420px;color:var(--muted);font-size:13px}
+.player-info{padding:19px 21px 21px}.kicker{color:#c4b5fd;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.15em}.title{font-size:clamp(20px,2.5vw,28px);margin:4px 0;overflow-wrap:anywhere}.meta{color:var(--muted);font-size:13px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.secondary{color:var(--text);background:#ffffff08;border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-weight:650}.secondary:hover{background:#ffffff10;border-color:#45455e}.secondary:disabled{opacity:.35;cursor:not-allowed}
+.head{padding:19px 18px 14px;border-bottom:1px solid var(--line)}.headrow{display:flex;justify-content:space-between;align-items:center}.head h2{margin:0;font-size:17px}.count{color:var(--muted);font-size:12px}.tabs{display:flex;gap:7px;margin-top:14px}.tab{flex:1;border:1px solid var(--line);background:transparent;color:var(--muted);padding:8px;border-radius:9px;font-size:13px;font-weight:750}.tab.active{color:#e9ddff;background:#8b5cf622;border-color:#8b5cf277}.search{width:100%;margin-top:12px;background:#0b0b13;border:1px solid var(--line);border-radius:9px;padding:10px 11px;color:var(--text);outline:none}.search:focus,.code-input:focus{border-color:#a78bfa;box-shadow:0 0 0 3px #a78bfa18}
+.list{padding:8px;max-height:520px;overflow:auto}.item{width:100%;display:grid;grid-template-columns:40px minmax(0,1fr) 17px;align-items:center;gap:11px;text-align:left;border:1px solid transparent;background:transparent;color:var(--text);border-radius:11px;padding:11px 9px;margin:2px 0}.item:hover{background:#ffffff08}.item.active{background:#8b5cf222;border-color:#8b5cf255}.item.unreleased{border-left:2px solid var(--unreleased)}.num{width:40px;height:40px;display:grid;place-items:center;border-radius:9px;background:#ffffff08;color:#c4b5fd;font-weight:800;font-size:12px}.name{font-weight:700;font-size:13px;overflow-wrap:anywhere}.file{color:var(--muted);font-size:11px;margin-top:4px}.unreleased-label{display:inline-block;color:#d8b4fe;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-left:6px}.arrow{color:#c4b5fd}.emptylist{padding:25px 14px;text-align:center;color:var(--muted);font-size:13px}
+.unreleased-access{padding:14px 8px 15px;border-top:1px solid var(--line)}.unreleased-button{width:100%;border:1px solid #8b5cf266;background:linear-gradient(135deg,#8b5cf622,#a855f711);color:#e9ddff;border-radius:11px;padding:12px 13px;font-weight:750;transition:.15s}.unreleased-button:hover{background:#8b5cf633;border-color:#a78bfa}.unreleased-button.locked::before{content:"🔒 "}.unreleased-button.unlocked::before{content:"✓ "}
+.modal{position:fixed;inset:0;background:#000000aa;display:none;place-items:center;padding:20px;z-index:100;backdrop-filter:blur(8px)}.modal.show{display:grid}.modal-box{width:min(500px,100%);background:linear-gradient(145deg,#191524,#0f0c15);border:1px solid #3c2852;border-radius:18px;padding:27px;box-shadow:0 25px 100px #0008}.modal-box h2{margin:0 0 8px;font-size:24px}.modal-description{color:var(--muted);font-size:14px;margin:0 0 20px}.code-row{display:flex;gap:9px}.code-input{min-width:0;flex:1;background:#0b0910;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:11px 12px;outline:none}.unlock{border:1px solid transparent;background:#7541c8;color:white;border-radius:10px;padding:11px 16px;font-weight:750}.unlock:hover{filter:brightness(1.15)}.close-modal{margin-top:12px;width:100%;border:1px solid var(--line);background:#ffffff08;color:var(--muted);border-radius:10px;padding:9px}.gate-error{min-height:1.4em;color:var(--danger);font-size:12px;margin-top:9px}.warning{color:#8f7da4;font-size:11px;margin-top:18px}.foot{text-align:center;color:#77758d;font-size:12px;margin-top:24px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.list{max-height:360px}}@media(max-width:520px){main{padding:20px 13px 35px}.topbar{padding:14px}.top-note{display:none}.player-info{padding:16px}.code-row{flex-direction:column}.unlock{width:100%}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="mark">▶</span><span>The Cousins</span></div>
+  <div class="top-note">YOUR NEXT EPISODE STARTS HERE</div>
+</header>
+
+<main>
+<section class="hero">
+  <p class="eyebrow">The official viewing room</p>
+  <h1>The Cousins</h1>
+  <p class="subtitle">Every episode, all in one place. Pick a season, choose an episode, and settle in.</p>
+</section>
+
+<div class="status">
+  <span class="dot"></span>
+  <span id="status">Season 1 is ready — choose an episode to begin watching.</span>
+</div>
+
+<section class="layout">
+  <div class="card">
+    <div class="video-wrap">
+      <div id="player"></div>
+      <div class="empty" id="placeholder">
+        <div class="playicon">▶</div>
+        <h2>Welcome to The Cousins</h2>
+        <p>Choose an episode from the list to start watching.</p>
+      </div>
+    </div>
+
+    <div class="player-info">
+      <div class="kicker" id="kicker">NOW SHOWING</div>
+      <h2 class="title" id="title">No episode selected</h2>
+      <div class="meta" id="meta">Choose an episode from the list.</div>
+      <div class="actions">
+        <button class="secondary" id="prev" disabled>← Previous</button>
+        <button class="secondary" id="next" disabled>Next episode →</button>
+        <button class="secondary" id="restart" disabled>↺ Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="card">
+    <div class="head">
+      <div class="headrow">
+        <h2>Episodes</h2>
+        <span class="count" id="count">0 episodes</span>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-season="s1">Season 1</button>
+        <button class="tab" data-season="s2">Season 2</button>
+      </div>
+
+      <input class="search" id="search" type="search" placeholder="Search episodes…" aria-label="Search episodes">
+    </div>
+
+    <div class="list" id="list"></div>
+
+    <div class="unreleased-access">
+      <button class="unreleased-button locked" id="unreleasedButton" type="button">Watch unreleased</button>
+    </div>
+  </aside>
+</section>
+
+<p class="foot">The Cousins · Episodes hosted on YouTube and Google Drive</p>
+</main>
+
+<div class="modal" id="passwordModal">
+  <div class="modal-box">
+    <p class="eyebrow">Private screening</p>
+    <h2>Watch unreleased</h2>
+    <p class="modal-description">This is the minimal security we have so that only specific people can watch the episodes that haven't been released yet. So, if you hack in, congratulations. You now have unpermitted access to several more episodes of primitives being numbskulls.</p>
+
+    <form id="passwordForm">
+      <div class="code-row">
+        <input class="code-input" id="codeInput" type="password" placeholder="Access code" autocomplete="off" aria-label="Access code">
+        <button class="unlock" type="submit">Unlock</button>
+      </div>
+      <div class="gate-error" id="gateError"></div>
+    </form>
+
+    <button class="close-modal" id="closeModal" type="button">Cancel</button>
+    <div class="warning">Private episodes are hosted separately from the public episodes.</div>
+  </div>
+</div>
+
 <script>
 const ACCESS_CODE = "ipadkid";
 
 const RELEASED_EPISODES = [
-  {
-    season: "s1",
-    title: "Season 1 Trailer",
-    id: "yc4HMOTrnJM",
-    description: "The Season 1 Trailer for The Cousins.",
-    trailer: true
-  },
-  {
-    season: "s1",
-    title: "S1E1 — iPad Kid",
-    id: "qurSAnPhyno",
-    description: "The iPad kid keeps interrupting Cole and Max’s advertisements."
-  },
-  {
-    season: "s1",
-    title: "S1E2 — Probably Adopted",
-    id: "nX8M5bJiuJE",
-    description: "Max's cousins act incredibly disgusting and stupid, while Max begins to believe he was adopted into this insane family."
-  },
-  {
-    season: "s1",
-    title: "S1E3 — Maximum Possibilities AI",
-    id: "J58p2_q4xxc",
-    description: "Cole builds an AI that looks uncannily like Max, and the result is something incredible. His brother and he start to notice weird, uncanny things happening. This philosophical zombie appears to know everything, yet may understand nothing at all."
-  },
-  {
-    season: "s1",
-    title: "S1E4 — When you try to make a movie with 2 lunatics",
-    id: "iEpw6GQsoEw",
-    description: "Max attempts to make a movie, but chaos occurs when he invites his cousins to do it with him."
-  },
-  {
-    season: "s1",
-    title: "S1E5 — What Not To Do At A Wedding",
-    id: "NUBbyuQa9cE",
-    description: "Cole, Leo and Max go to a wedding and get into shenanigans."
-  },
-  {
-    season: "s1",
-    title: "S1E6 — The Stupid Games",
-    id: "yGKOOUXx9QQ",
-    description: "The cousins enter a game where they have to fight each other to the death."
-  }
+  {season:"s1",title:"Season 1 Trailer",id:"yc4HMOTrnJM",description:"The Season 1 Trailer for The Cousins.",trailer:true},
+  {season:"s1",title:"S1E1 — iPad Kid",id:"qurSAnPhyno",description:"The iPad kid keeps interrupting Cole and Max’s advertisements."},
+  {season:"s1",title:"S1E2 — Probably Adopted",id:"nX8M5bJiuJE",description:"Max's cousins act incredibly disgusting and stupid, while Max begins to believe he was adopted into this insane family."},
+  {season:"s1",title:"S1E3 — Maximum Possibilities AI",id:"J58p2_q4xxc",description:"Cole builds an AI that looks uncannily like Max, and the result is something incredible. His brother and he start to notice weird, uncanny things happening. This philosophical zombie appears to know everything, yet may understand nothing at all."},
+  {season:"s1",title:"S1E4 — When you try to make a movie with 2 lunatics",id:"iEpw6GQsoEw",description:"Max attempts to make a movie, but chaos occurs when he invites his cousins to do it with him."},
+  {season:"s1",title:"S1E5 — What Not To Do At A Wedding",id:"NUBbyuQa9cE",description:"Cole, Leo and Max go to a wedding and get into shenanigans."},
+  {season:"s1",title:"S1E6 — The Stupid Games",id:"yGKOOUXx9QQ",description:"The cousins enter a game where they have to fight each other to the death."}
 ];
 
 const UNRELEASED_EPISODES = [
-  {
-    season: "s2",
-    title: "S2E1 — Dawn of iPad Kid",
-    url: "https://drive.google.com/file/d/16Q15VAc4u3SJ00GXiN6ixnp9s4Cba7-V/preview",
-    description: "Leo discovers iPad."
-  },
-  {
-    season: "s2",
-    title: "S2E2 — Toe Muncher",
-    url: "https://drive.google.com/file/d/1Zpfl013uaWhlBm0ua-13k_Ns45dZsgCV/preview",
-    description: "Max finds out his family is just a chain of increasingly insane relatives, and chaos occurs when his doorbell rings."
-  },
-  {
-    season: "s2",
-    title: "S2E3 — Saved",
-    url: "https://drive.google.com/file/d/1NDLmAbTEFC01jSewOl90Z98E6ej54ueW/preview",
-    description: "Max buys a hub and Cole sees what happens when it is plugged into itself. Incredible things happen."
-  }
+  {season:"s2",title:"S2E1 — Dawn of iPad Kid",url:"https://drive.google.com/file/d/16Q15VAc4u3SJ00GXiN6ixnp9s4Cba7-V/preview",description:"Leo discovers iPad."},
+  {season:"s2",title:"S2E2 — Toe Muncher",url:"https://drive.google.com/file/d/1Zpfl013uaWhlBm0ua-13k_Ns45dZsgCV/preview",description:"Max finds out his family is just a chain of increasingly insane relatives, and chaos occurs when his doorbell rings."},
+  {season:"s2",title:"S2E3 — Saved",url:"https://drive.google.com/file/d/1NDLmAbTEFC01jSewOl90Z98E6ej54ueW/preview",description:"Max buys a hub and Cole sees what happens when it is plugged into itself. Incredible things happen."}
 ];
 
 const episodes = [
-  ...RELEASED_EPISODES.map(ep => ({
-    ...ep,
-    released: true,
-    type: "youtube"
-  })),
-
-  ...UNRELEASED_EPISODES.map(ep => ({
-    ...ep,
-    released: false,
-    type: "drive"
-  }))
+  ...RELEASED_EPISODES.map(ep=>({...ep,released:true,type:"youtube"})),
+  ...UNRELEASED_EPISODES.map(ep=>({...ep,released:false,type:"drive"}))
 ];
 
 let currentSeason = "s1";
 let current = -1;
 let unlocked = sessionStorage.getItem("cousinsUnlocked") === "yes";
 
-const player = document.getElementById("player");
-const placeholder = document.getElementById("placeholder");
-const title = document.getElementById("title");
-const meta = document.getElementById("meta");
-const kicker = document.getElementById("kicker");
-const list = document.getElementById("list");
-const search = document.getElementById("search");
-const count = document.getElementById("count");
-const status = document.getElementById("status");
+const player=document.getElementById("player");
+const placeholder=document.getElementById("placeholder");
+const title=document.getElementById("title");
+const meta=document.getElementById("meta");
+const kicker=document.getElementById("kicker");
+const list=document.getElementById("list");
+const search=document.getElementById("search");
+const count=document.getElementById("count");
+const status=document.getElementById("status");
+const prev=document.getElementById("prev");
+const next=document.getElementById("next");
+const restart=document.getElementById("restart");
+const unreleasedButton=document.getElementById("unreleasedButton");
+const passwordModal=document.getElementById("passwordModal");
+const passwordForm=document.getElementById("passwordForm");
+const codeInput=document.getElementById("codeInput");
+const gateError=document.getElementById("gateError");
+const closeModal=document.getElementById("closeModal");
 
-const prev = document.getElementById("prev");
-const next = document.getElementById("next");
-const restart = document.getElementById("restart");
-
-const unreleasedButton = document.getElementById("unreleasedButton");
-
-const passwordModal = document.getElementById("passwordModal");
-const passwordForm = document.getElementById("passwordForm");
-const codeInput = document.getElementById("codeInput");
-const gateError = document.getElementById("gateError");
-const closeModal = document.getElementById("closeModal");
-
-
-/* -----------------------------
-   Utility
------------------------------ */
-
-function seasonName(season) {
-  return season === "s2" ? "Season 2" : "Season 1";
+function seasonName(season){
+  return season==="s2" ? "Season 2" : "Season 1";
 }
 
+function visibleEpisodes(){
+  const query=search.value.trim().toLowerCase();
 
-/* -----------------------------
-   Visible episode list
------------------------------ */
-
-function visibleEpisodes() {
-  const query = search.value.trim().toLowerCase();
-
-  return episodes.filter(ep => {
-    // Only show the currently selected season.
-    if (ep.season !== currentSeason) {
-      return false;
-    }
-
-    // Hide unreleased episodes until unlocked.
-    if (!ep.released && !unlocked) {
-      return false;
-    }
-
-    // Search.
-    if (!query) {
-      return true;
-    }
-
-    return (
-      ep.title.toLowerCase().includes(query) ||
-      ep.description.toLowerCase().includes(query)
-    );
+  return episodes.filter(ep=>{
+    if(ep.season!==currentSeason) return false;
+    if(!ep.released && !unlocked) return false;
+    if(!query) return true;
+    return ep.title.toLowerCase().includes(query) ||
+           ep.description.toLowerCase().includes(query);
   });
 }
 
-
-/* -----------------------------
-   Render episode list
------------------------------ */
-
-function render() {
-  const visible = visibleEpisodes();
-
+function render(){
+  const visible=visibleEpisodes();
   list.replaceChildren();
 
-  if (!visible.length) {
-    const empty = document.createElement("div");
-
-    empty.className = "emptylist";
-
-    if (currentSeason === "s2" && !unlocked) {
-      empty.textContent = "Season 2 is coming soon.";
-    } else {
-      empty.textContent = "No episodes found.";
-    }
-
+  if(!visible.length){
+    const empty=document.createElement("div");
+    empty.className="emptylist";
+    empty.textContent=currentSeason==="s2" && !unlocked
+      ? "Season 2 is coming soon."
+      : "No episodes found.";
     list.appendChild(empty);
   }
 
-  visible.forEach((ep, index) => {
-    const realIndex = episodes.indexOf(ep);
+  visible.forEach((ep,index)=>{
+    const realIndex=episodes.indexOf(ep);
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="item"+(realIndex===current?" active":"")+(!ep.released?" unreleased":"");
 
-    const button = document.createElement("button");
+    const number=document.createElement("span");
+    number.className="num";
+    const match=ep.title.match(/(?:episode|ep|e)?\s*0*(\d+)/i);
+    number.textContent=match ? String(Number(match[1])).padStart(2,"0") : String(index+1).padStart(2,"0");
 
-    button.type = "button";
+    const info=document.createElement("span");
+    const name=document.createElement("span");
+    name.className="name";
+    name.textContent=ep.title;
 
-    button.className =
-      "item" +
-      (realIndex === current ? " active" : "") +
-      (!ep.released ? " unreleased" : "");
-
-    /* Episode number */
-
-    const number = document.createElement("span");
-
-    number.className = "num";
-
-    const match = ep.title.match(
-      /(?:episode|ep|e)?\s*0*(\d+)/i
-    );
-
-    number.textContent = match
-      ? String(Number(match[1])).padStart(2, "0")
-      : String(index + 1).padStart(2, "0");
-
-
-    /* Episode information */
-
-    const info = document.createElement("span");
-
-    const name = document.createElement("span");
-
-    name.className = "name";
-    name.textContent = ep.title;
-
-    if (!ep.released) {
-      const label = document.createElement("span");
-
-      label.className = "unreleased-label";
-      label.textContent = "UNRELEASED";
-
+    if(!ep.released){
+      const label=document.createElement("span");
+      label.className="unreleased-label";
+      label.textContent="UNRELEASED";
       name.appendChild(label);
     }
 
-    const file = document.createElement("div");
+    const file=document.createElement("div");
+    file.className="file";
+    file.textContent=ep.released ? "YouTube" : "Private screening";
 
-    file.className = "file";
+    info.append(name,file);
 
-    file.textContent = ep.released
-      ? "YouTube"
-      : "Private screening";
+    const arrow=document.createElement("span");
+    arrow.className="arrow";
+    arrow.textContent=realIndex===current ? "▶" : "›";
 
-    info.append(name, file);
-
-
-    /* Arrow */
-
-    const arrow = document.createElement("span");
-
-    arrow.className = "arrow";
-
-    arrow.textContent =
-      realIndex === current ? "▶" : "›";
-
-
-    button.append(number, info, arrow);
-
-    button.addEventListener("click", () => {
-      play(realIndex);
-    });
-
+    button.append(number,info,arrow);
+    button.addEventListener("click",()=>play(realIndex));
     list.appendChild(button);
   });
 
-
-  /* Episode count */
-
-  const n = episodes.filter(ep =>
-    ep.season === currentSeason &&
-    (ep.released || unlocked)
-  ).length;
-
-  count.textContent =
-    `${n} episode${n === 1 ? "" : "s"}`;
+  const n=episodes.filter(ep=>ep.season===currentSeason&&(ep.released||unlocked)).length;
+  count.textContent=`${n} episode${n===1?"":"s"}`;
 }
 
+function navigableIndex(fromIndex,direction){
+  let index=fromIndex+direction;
 
-/* -----------------------------
-   Previous / next navigation
------------------------------ */
-
-function navigableIndex(fromIndex, direction) {
-  if (
-    fromIndex < 0 ||
-    fromIndex >= episodes.length
-  ) {
-    return -1;
-  }
-
-  const season = episodes[fromIndex].season;
-
-  let index = fromIndex + direction;
-
-  while (
-    index >= 0 &&
-    index < episodes.length
-  ) {
-    const ep = episodes[index];
-
-    /*
-      Stay inside the same season.
-    */
-
-    if (ep.season !== season) {
-      return -1;
-    }
-
-    /*
-      Skip locked episodes.
-    */
-
-    if (ep.released || unlocked) {
-      return index;
-    }
-
-    index += direction;
+  while(index>=0 && index<episodes.length){
+    if(episodes[index].released || unlocked) return index;
+    index+=direction;
   }
 
   return -1;
 }
 
+function play(index){
+  if(index<0 || index>=episodes.length) return;
 
-/* -----------------------------
-   Play an episode
------------------------------ */
+  const ep=episodes[index];
 
-function play(index) {
-  if (
-    index < 0 ||
-    index >= episodes.length
-  ) {
-    return;
-  }
-
-  const ep = episodes[index];
-
-
-  /*
-    Don't allow locked episodes
-    to be played directly.
-  */
-
-  if (!ep.released && !unlocked) {
+  if(!ep.released && !unlocked){
     openPasswordModal();
     return;
   }
 
+  current=index;
+  currentSeason=ep.season;
 
-  current = index;
-  currentSeason = ep.season;
-
-
-  /*
-    Update season tabs.
-  */
-
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.classList.toggle(
-      "active",
-      tab.dataset.season === currentSeason
-    );
+  document.querySelectorAll(".tab").forEach(tab=>{
+    tab.classList.toggle("active",tab.dataset.season===currentSeason);
   });
 
-
-  /*
-    Remove the old player.
-  */
-
+  placeholder.classList.add("hidden");
   player.replaceChildren();
 
-  placeholder.classList.add("hidden");
+  const frame=document.createElement("iframe");
+  frame.title=`The Cousins — ${ep.title}`;
+  frame.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  frame.allowFullscreen=true;
+  frame.referrerPolicy="strict-origin-when-cross-origin";
 
-
-  /*
-    Create iframe.
-  */
-
-  const frame = document.createElement("iframe");
-
-  frame.title = `The Cousins — ${ep.title}`;
-
-  frame.allow =
-    "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-
-  frame.allowFullscreen = true;
-
-  frame.referrerPolicy =
-    "strict-origin-when-cross-origin";
-
-  frame.style.width = "100%";
-  frame.style.height = "100%";
-  frame.style.border = "0";
-  frame.style.display = "block";
-
-
-  /*
-    YouTube episode.
-  */
-
-  if (ep.type === "youtube") {
-    frame.src =
-      `https://www.youtube.com/embed/${encodeURIComponent(ep.id)}` +
-      `?playsinline=1&rel=0`;
+  if(ep.type==="youtube"){
+  frame.src=`https://www.youtube.com/embed/${encodeURIComponent(ep.id)}?playsinline=1&rel=0`;
+  }else{
+  window.open(ep.url.replace("/preview", "/view"), "_blank");
+  return;
   }
-
-
-  /*
-    Google Drive episode.
-    
-    The URL already uses /preview,
-    which is the embeddable Drive player.
-  */
-
-  else if (ep.type === "drive") {
-    frame.src = ep.url;
-  }
-
-
-  /*
-    Safety fallback.
-  */
-
-  else {
-    console.error("Unknown episode type:", ep.type);
-    return;
-  }
-
 
   player.appendChild(frame);
 
+  kicker.textContent=`${seasonName(ep.season)} · ${ep.released?"NOW SHOWING":"UNRELEASED"}`;
+  title.textContent=ep.title;
+  meta.textContent=ep.description;
 
-  /*
-    Update episode information.
-  */
+  prev.disabled=navigableIndex(index,-1)===-1;
+  next.disabled=navigableIndex(index,1)===-1;
+  restart.disabled=false;
 
-  kicker.textContent =
-    `${seasonName(ep.season)} · ` +
-    `${ep.released ? "NOW SHOWING" : "UNRELEASED"}`;
-
-  title.textContent = ep.title;
-
-  meta.textContent = ep.description;
-
-
-  /*
-    Update navigation buttons.
-  */
-
-  prev.disabled =
-    navigableIndex(index, -1) === -1;
-
-  next.disabled =
-    navigableIndex(index, 1) === -1;
-
-  restart.disabled = false;
-
-
-  /*
-    Update status.
-  */
-
-  if (ep.type === "youtube") {
-    status.textContent =
-      `${ep.title} is playing from YouTube.`;
-  } else {
-    status.textContent =
-      `${ep.title} is playing from the private screening room.`;
-  }
-
-
-  /*
-    Refresh the episode list so the
-    active episode gets highlighted.
-  */
+  status.textContent=ep.released
+    ? `${ep.title} is playing from YouTube.`
+    : `${ep.title} is playing from the private screening room.`;
 
   render();
 }
 
-
-/* -----------------------------
-   Password modal
------------------------------ */
-
-function openPasswordModal() {
+function openPasswordModal(){
   passwordModal.classList.add("show");
-
-  gateError.textContent = "";
-  codeInput.value = "";
-
-  setTimeout(() => {
-    codeInput.focus();
-  }, 50);
+  gateError.textContent="";
+  codeInput.value="";
+  setTimeout(()=>codeInput.focus(),50);
 }
 
-
-function closePasswordModal() {
+function closePasswordModal(){
   passwordModal.classList.remove("show");
-
-  gateError.textContent = "";
-  codeInput.value = "";
+  gateError.textContent="";
+  codeInput.value="";
 }
 
-
-/* -----------------------------
-   Unreleased button
------------------------------ */
-
-function updateUnlockButton() {
-  unreleasedButton.classList.toggle(
-    "locked",
-    !unlocked
-  );
-
-  unreleasedButton.classList.toggle(
-    "unlocked",
-    unlocked
-  );
-
-  unreleasedButton.textContent =
-    "Watch unreleased";
+function updateUnlockButton(){
+  unreleasedButton.classList.toggle("locked",!unlocked);
+  unreleasedButton.classList.toggle("unlocked",unlocked);
+  unreleasedButton.textContent="Watch unreleased";
 }
 
-
-/* -----------------------------
-   Previous button
------------------------------ */
-
-prev.addEventListener("click", () => {
-  const index = navigableIndex(current, -1);
-
-  if (index !== -1) {
-    play(index);
-  }
+prev.addEventListener("click",()=>{
+  const index=navigableIndex(current,-1);
+  if(index!==-1) play(index);
 });
 
-
-/* -----------------------------
-   Next button
------------------------------ */
-
-next.addEventListener("click", () => {
-  const index = navigableIndex(current, 1);
-
-  if (index !== -1) {
-    play(index);
-  }
+next.addEventListener("click",()=>{
+  const index=navigableIndex(current,1);
+  if(index!==-1) play(index);
 });
 
-
-/* -----------------------------
-   Restart
------------------------------ */
-
-restart.addEventListener("click", () => {
-  if (current !== -1) {
-    play(current);
-  }
+restart.addEventListener("click",()=>{
+  if(current!==-1) play(current);
 });
 
-
-/* -----------------------------
-   Season tabs
------------------------------ */
-
-document.querySelectorAll(".tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    currentSeason = tab.dataset.season;
-
-    /*
-      Update active tab.
-    */
-
-    document.querySelectorAll(".tab").forEach(other => {
-      other.classList.toggle(
-        "active",
-        other === tab
-      );
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    currentSeason=tab.dataset.season;
+    document.querySelectorAll(".tab").forEach(other=>{
+      other.classList.toggle("active",other===tab);
     });
-
-
-    /*
-      If the currently playing episode
-      isn't in this season, don't pretend
-      it is selected in the new list.
-    */
-
-    if (
-      current !== -1 &&
-      episodes[current].season !== currentSeason
-    ) {
-      current = -1;
-
-      player.replaceChildren();
-
-      placeholder.classList.remove("hidden");
-
-      title.textContent = "No episode selected";
-
-      meta.textContent =
-        "Choose an episode from the list.";
-
-      kicker.textContent = "NOW SHOWING";
-
-      prev.disabled = true;
-      next.disabled = true;
-      restart.disabled = true;
-
-      status.textContent =
-        `${seasonName(currentSeason)} is ready — choose an episode to begin watching.`;
-    }
-
     render();
   });
 });
 
+search.addEventListener("input",render);
 
-/* -----------------------------
-   Search
------------------------------ */
-
-search.addEventListener("input", render);
-
-
-/* -----------------------------
-   Watch unreleased
------------------------------ */
-
-unreleasedButton.addEventListener("click", () => {
-
-  /*
-    If not unlocked, show password.
-  */
-
-  if (!unlocked) {
+unreleasedButton.addEventListener("click",()=>{
+  if(!unlocked){
     openPasswordModal();
     return;
   }
 
+  const first=episodes.findIndex(ep=>ep.season===currentSeason&&!ep.released);
 
-  /*
-    Switch to Season 2.
-  */
-
-  currentSeason = "s2";
-
-  document.querySelectorAll(".tab").forEach(tab => {
-    tab.classList.toggle(
-      "active",
-      tab.dataset.season === "s2"
-    );
-  });
-
-
-  /*
-    Clear search so all Season 2
-    episodes are visible.
-  */
-
-  search.value = "";
-
-
-  render();
-
-
-  /*
-    Start the first unreleased episode.
-  */
-
-  const first = episodes.findIndex(
-    ep =>
-      ep.season === "s2" &&
-      !ep.released
-  );
-
-  if (first !== -1) {
+  if(first!==-1){
     play(first);
+  }else{
+    const any=episodes.findIndex(ep=>!ep.released);
+    if(any!==-1) play(any);
   }
 });
 
-
-/* -----------------------------
-   Password submission
------------------------------ */
-
-passwordForm.addEventListener("submit", event => {
+passwordForm.addEventListener("submit",event=>{
   event.preventDefault();
 
-  const enteredCode =
-    codeInput.value.trim().toLowerCase();
-
-
-  if (
-    enteredCode ===
-    ACCESS_CODE.toLowerCase()
-  ) {
-
-    /*
-      Unlock for this browser session.
-    */
-
-    unlocked = true;
-
-    sessionStorage.setItem(
-      "cousinsUnlocked",
-      "yes"
-    );
-
-
+  if(codeInput.value.trim().toLowerCase()===ACCESS_CODE.toLowerCase()){
+    unlocked=true;
+    sessionStorage.setItem("cousinsUnlocked","yes");
     updateUnlockButton();
-
     closePasswordModal();
-
     render();
-
-    status.textContent =
-      "Unreleased episodes unlocked — congratulations, primitive.";
-
-  } else {
-
-    gateError.textContent =
-      "That code didn't work. Try again.";
-
+    status.textContent="Unreleased episodes unlocked — congratulations, primitive.";
+  }else{
+    gateError.textContent="That code didn't work. Try again.";
     codeInput.select();
   }
 });
 
+closeModal.addEventListener("click",closePasswordModal);
 
-/* -----------------------------
-   Close modal button
------------------------------ */
+passwordModal.addEventListener("click",event=>{
+  if(event.target===passwordModal) closePasswordModal();
+});
 
-closeModal.addEventListener(
-  "click",
-  closePasswordModal
-);
-
-
-/* -----------------------------
-   Click outside modal
------------------------------ */
-
-passwordModal.addEventListener(
-  "click",
-  event => {
-    if (event.target === passwordModal) {
-      closePasswordModal();
-    }
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape" && passwordModal.classList.contains("show")){
+    closePasswordModal();
   }
-);
-
-
-/* -----------------------------
-   Escape key
------------------------------ */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    if (
-      event.key === "Escape" &&
-      passwordModal.classList.contains("show")
-    ) {
-      closePasswordModal();
-    }
-
-  }
-);
-
-
-/* -----------------------------
-   Initial setup
------------------------------ */
+});
 
 updateUnlockButton();
 render();
 </script>
+</body>
+</html>
