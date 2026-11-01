@@ -268,7 +268,7 @@ function play(index){
   if(ep.type==="youtube"){
   frame.src=`https://www.youtube.com/embed/${encodeURIComponent(ep.id)}?playsinline=1&rel=0`;
   }else{
-  window.open(ep.url.replace("/preview", "/view"), "_blank");
+  frame.src=ep.url
   return;
   }
 
