@@ -266,10 +266,9 @@ function play(index){
   frame.referrerPolicy="strict-origin-when-cross-origin";
 
   if(ep.type==="youtube"){
-  frame.src=`https://www.youtube.com/embed/${encodeURIComponent(ep.id)}?playsinline=1&rel=0`;
+    frame.src=`https://www.youtube.com/embed/${encodeURIComponent(ep.id)}?playsinline=1&rel=0`;
   }else{
-  frame.src=ep.url
-  return;
+    frame.src=ep.url;
   }
 
   player.appendChild(frame);
